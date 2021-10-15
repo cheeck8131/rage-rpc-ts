@@ -1,13 +1,10 @@
 {
   "name": "server",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
+  "version": "0.0.1",
+  "description": "RAGE Multiplayer library for server-side",
+  "scripts": {},
   "keywords": [],
-  "author": "",
+  "author": "cheeck8131",
   "license": "ISC",
   "devDependencies": {
     "@types/ragemp-s": "github:CocaColaBear/types-ragemp-s#v2.0"
