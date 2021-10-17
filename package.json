@@ -6,10 +6,8 @@
   "keywords": [],
   "author": "cheeck8131",
   "license": "ISC",
-  "devDependencies": {
-    "@types/ragemp-s": "github:CocaColaBear/types-ragemp-s#v2.0"
-  },
   "dependencies": {
+    "@types/ragemp-s": "github:CocaColaBear/types-ragemp-s#v2.0",
     "rage-rpc": "^0.4.0"
   }
 }
