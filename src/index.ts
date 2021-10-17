@@ -1,4 +1,5 @@
 import rpc from "rage-rpc";
+import System from "./system";
 
 type ServiceInstances<T extends System.ServicesType> = {
   [K in System.Uncap<keyof T>]: InstanceType<

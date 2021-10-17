@@ -1,3 +1,5 @@
+import System from "./system";
+
 type IServices<T extends System.ServicesType> = {
   [K in keyof T]: { [L in keyof InstanceType<T[K]>]: InstanceType<T[K]>[L] };
 };
