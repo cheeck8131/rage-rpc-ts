@@ -1,8 +1,11 @@
+import "./tools";
 import rpc from "rage-rpc";
 import { System, RuntimeTypes } from "./types";
 
 // @ts-ignore
-export abstract class Service<T extends System.ServicesType = ServiceGenericType> {
+export abstract class Service<
+  T extends System.ServicesType = ServiceGenericType
+> {
   private static namespaces = <{ [key: string]: any }>{};
   private static EV_PREFIX = /^rpc/;
   private static procedures = new Map<string, System.anyFunction>();
@@ -33,8 +36,8 @@ export abstract class Service<T extends System.ServicesType = ServiceGenericType
   public static combineServices<T extends System.ServicesType>(services: T) {
     let arr = Object.keys(Service.namespaces);
     for (const key in services) {
-      arr.splice(arr.indexOf(key), 1);
-      // arr.remove(key);
+      // arr.splice(arr.indexOf(key), 1);
+      arr.remove(key);
     }
     if (arr.length !== 0) {
       throw new Error(`Runtime error: ${arr} is missing to combineServices`);
