@@ -1,5 +1,143 @@
-declare namespace System {
+declare global {
+  interface PlayerMp {}
+}
+
+export declare namespace RuntimeTypes {
+  type IServices<T extends System.ServicesType> = {
+    [K in keyof T]: { [L in keyof InstanceType<T[K]>]: InstanceType<T[K]>[L] };
+  };
+  type IForProxy<T extends System.ServicesInstanceType> = {
+    [K in keyof T]: System.GetPrefixedAndRemovePrefixFromObject<
+      T[K],
+      System.PREF
+    >;
+  };
+  type IForProxyPromised<T extends System.ServicesInstanceType> = {
+    [K in keyof T]: {
+      [N in keyof T[K]]: T[K][N] extends (...args: any) => any // type to verify
+        ? System.ReplaceReturnType<
+            T[K][N],
+            ReturnType<T[K][N]> extends Promise<any>
+              ? ReturnType<T[K][N]>
+              : Promise<ReturnType<T[K][N]>>
+          >
+        : T[K][N] extends System.anyFunction
+        ? (...args: Parameters<T[K][N]>) => ReturnType<T[K][N]>
+        : never;
+    };
+  };
+  type IProxySafeUncapitalized<T extends System.ServicesInstanceType> = {
+    [K in System.Uncap<keyof T>]: System.UncapValue<T, K>;
+  };
+  type IProxySafeUncapEvents<T extends System.ServicesInstanceType> = {
+    [K in keyof T]: {
+      [N in System.Uncap<keyof T[K]>]: System.UncapValue<T[K], N>;
+    };
+  };
+  type INoRet<T extends System.ServicesInstanceType> = {
+    [K in keyof T]: {
+      [N in keyof T[K]]: T[K][N] extends (...args: infer A) => infer R
+        ? ((...args: A) => void) & { async(...args: A): R }
+        : never;
+    };
+  };
+
+  type IForProxyPlayerSafe<T extends System.ServicesInstanceType> = {
+    [K in keyof T]: {
+      [N in keyof T[K]]: T[K][N] extends System.anyFunction
+        ? System.RemoveFirstArgument<T[K][N], PlayerMp>
+        : never;
+    };
+  };
+
+  type IForProxyJsonSafe<T extends System.ServicesInstanceType> = {
+    [K in keyof T]: System.ReplaceReturnTypeInObject<
+      System.ReplaceReturnTypeInObject<
+        System.ReplaceReturnTypeInObject<
+          T[K],
+          Map<any, any>,
+          System.UnsupportedNetworkType<Map<any, any>>
+        >,
+        Set<any>,
+        System.UnsupportedNetworkType<Set<any>>
+      >,
+      Date,
+      string
+    >;
+  };
+
+  export type IProxy<T extends System.ServicesType> = INoRet<
+    IProxySafeUncapEvents<
+      IProxySafeUncapitalized<
+        IForProxyJsonSafe<
+          IForProxyPlayerSafe<IForProxyPromised<IForProxy<IServices<T>>>>
+        >
+      >
+    >
+  >;
+
+  export type AllProcedures<T extends System.ServicesType> =
+    System.NoIntersection<
+      System.UnionToIntersection<
+        System.UnpackObjectEntries<{
+          [K in keyof T]: System.AddPrefixToObject<
+            IForProxyJsonSafe<
+              IForProxyPlayerSafe<IForProxyPromised<IForProxy<IServices<T>>>>
+            >[K],
+            K extends string ? K : never
+          >;
+        }>
+      >
+    >;
+  export type AllAsyncProcedures<T extends System.ServicesType> =
+    System.SelectFunctionsWhereReturnTypeIsNotNullable<
+      AllProcedures<T> extends { [K: string]: System.anyFunction }
+        ? AllProcedures<T>
+        : never
+    >;
+  export type AllSyncProcedures<T extends System.ServicesType> =
+    System.SelectFunctionsWhereReturnTypeIsNullable<
+      AllProcedures<T> extends { [K: string]: System.anyFunction }
+        ? AllProcedures<T>
+        : never
+    >;
+}
+
+export declare namespace System {
   namespace Service {
+    type ServerToServerInvoker<T extends System.ServicesType> = <
+      Procedures extends RuntimeTypes.AllProcedures<T>,
+      ProcedureName extends keyof Procedures,
+      Procedure extends Procedures[ProcedureName],
+      ProcedureArguments extends System.FnParams<Procedure>,
+      ProcedureReturn extends ReturnType<
+        Procedure extends Function ? Procedure : never
+      >
+    >(
+      name: ProcedureName,
+      ..._: ProcedureArguments
+    ) => ProcedureReturn;
+
+    type ClientToServerInvoker<T extends System.ServicesType> = <
+      Procedures extends RuntimeTypes.AllProcedures<T>,
+      ProcedureName extends keyof Procedures,
+      Procedure extends Procedures[ProcedureName],
+      ProcedureArguments extends System.FnParams<Procedure>,
+      ProcedureReturn extends ReturnType<
+        Procedure extends Function ? Procedure : never
+      >
+    >(
+      name: ProcedureName,
+      ..._: ProcedureArguments
+    ) => ProcedureReturn;
+
+    type ServiceInstances<T extends System.ServicesType> = {
+      [K in System.Uncap<keyof T>]: InstanceType<
+        System.UncapValue<T, K> extends System.AbstractClass
+          ? System.UncapValue<T, K>
+          : never
+      >;
+    };
     type IServices<T extends System.ServicesType> = {
       [K in keyof T]: {
         [L in keyof InstanceType<T[K]>]: InstanceType<T[K]>[L];
@@ -252,5 +390,3 @@ declare namespace System {
     ""
   >;
 }
-
-export default System;

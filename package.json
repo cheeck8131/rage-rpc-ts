@@ -1,6 +1,7 @@
 {
   "name": "server",
   "version": "0.0.1",
+  "main": "./src/index.ts",
   "description": "RAGE Multiplayer library for server-side",
   "scripts": {},
   "keywords": [],
