@@ -2,14 +2,16 @@ import rpc from "rage-rpc";
 import { System, RuntimeTypes } from "./types";
 
 // @ts-ignore
-abstract class Service<T extends System.ServicesType = ServiceGenericType> {
+export abstract class Service<T extends System.ServicesType = ServiceGenericType> {
   private static namespaces = <{ [key: string]: any }>{};
   private static EV_PREFIX = /^rpc/;
   private static procedures = new Map<string, System.anyFunction>();
 
   public services = <System.Service.ServiceInstances<T>>Service.namespaces;
 
-  public static Invoker = class Invoker<T extends System.ServicesType = ServiceGenericType> {
+  public static Invoker = class Invoker<
+    T extends System.ServicesType = ServiceGenericType
+  > {
     public call = <System.Service.ClientToServerInvoker<T>>((
       name: string,
       ...args: any[]
@@ -95,39 +97,4 @@ abstract class Service<T extends System.ServicesType = ServiceGenericType> {
       }
     }
   }
-}
-
-@Service.namespace
-class System extends Service {
-  constructor() {
-    super();
-    this.services.system.rpcClientRequest;
-  }
-
-  some() {
-    this.services.system.some();
-  }
-
-  private asfe() {
-    this.services.system.some();
-  }
-
-  @Service.access
-  rpcClientRequest(player: any, awawd: Date) {}
-
-  rpcClientRequWDest(player: any, someNumber: number) {
-    return [123];
-  }
-}
-
-const aw = Service.combineServices({ System });
-
-declare global {
-  type ServiceGenericType = typeof aw;
-}
-
-async function s() {
-  const local = new Service.Invoker();
-  local.services.System.rpcClientRequest(<PlayerMp>{}, new Date);
-  const a = await local.call("SystemClientRequWDest", 123);
 }
