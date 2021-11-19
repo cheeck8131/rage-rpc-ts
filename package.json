@@ -2,7 +2,7 @@
   "name": "server",
   "version": "0.0.1",
   "main": "./src/index.ts",
-  "description": "RAGE Multiplayer library for server-side",
+  "description": "RAGE Multiplayer rpc typed library",
   "scripts": {},
   "keywords": [],
   "author": "cheeck8131",
