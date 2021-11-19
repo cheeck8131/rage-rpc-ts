@@ -34,6 +34,8 @@ export const server = new Proxy(
   }
 ) as RuntimeTypes.IProxy<ServiceGenericType>;
 
+server.system.clientRequWDest
+
 const clientProxyCache = new Map<string, InstanceType<typeof Proxy>>();
 export const client = new Proxy(
   {},

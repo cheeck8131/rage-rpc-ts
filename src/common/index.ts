@@ -2,8 +2,8 @@ import "./tools";
 import rpc from "rage-rpc";
 import { System, RuntimeTypes } from "./types";
 
-// @ts-ignore
 export abstract class Service<
+  // @ts-ignore TODO: ServiceGenericType is user value
   T extends System.ServicesType = ServiceGenericType
 > {
   private static namespaces = <{ [key: string]: any }>{};
@@ -13,6 +13,7 @@ export abstract class Service<
   public services = <System.Service.ServiceInstances<T>>Service.namespaces;
 
   public static Invoker = class Invoker<
+    // @ts-ignore TODO: ServiceGenericType is user value
     T extends System.ServicesType = ServiceGenericType
   > {
     public call = <System.Service.ClientToServerInvoker<T>>((

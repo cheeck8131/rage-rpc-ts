@@ -20,9 +20,9 @@ class System extends Service {
   }
 
   @Service.access
-  rpcClientRequest(player: any, awawd: Date) {}
+  rpcClientRequest(player: PlayerMp, awawd: Date) {}
 
-  rpcClientRequWDest(player: any, someNumber: number) {
+  rpcClientRequWDest(player: PlayerMp, someNumber: number) {
     return [123];
   }
 }
@@ -32,5 +32,5 @@ const aw = Service.combineServices({ System });
 async function s() {
   const local = new Service.Invoker();
   local.services.System.rpcClientRequest(<PlayerMp>{}, new Date());
-  const a = await local.call("SystemClientRequWDest", 123);
+  const a = await local.call("SystemClientRequWDest", );
 }
